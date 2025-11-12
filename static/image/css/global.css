@@ -1,6 +1,6 @@
 /* ============================================
    SISTEMA DE DONACIONES - ESTILO GLOBAL
-   Minimalista, Futurista, Juvenil con Glassmorphism
+    CON LIQUID GLASS
    ============================================ */
 
 /* Variables CSS para consistencia - Azules Pasteles */
@@ -94,7 +94,7 @@ body::after {
 }
 
 /* ============================================
-   GLASSMORPHISM - LIQUID GLASS EFFECT
+   LIQUID GLASS EFFECT
    ============================================ */
 
 .glass-card {
@@ -661,4 +661,5 @@ h3 {
 ::-webkit-scrollbar-thumb:hover {
     background: var(--accent-hover);
 }
+
 
