@@ -1,0 +1,177 @@
+{% extends './base.html' %}
+
+{% block title %}Panel Administrador - Sistema de Donaciones{% endblock %}
+
+{% block body %}
+<nav class="nav-glass">
+    <div class="container-glass d-flex justify-content-between align-items-center">
+        <h3 style="margin: 0; color: white;">Panel Administrador</h3>
+        <div class="d-flex gap-2">
+            <span style="color: rgba(255, 255, 255, 0.8); align-self: center; margin-right: 1rem;">{{ current_user.fullname }}</span>
+            <a href="{{ url_for('logout') }}" class="btn-glass btn-glass-secondary" style="text-decoration: none;">Cerrar Sesión</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container-glass mt-5">
+    <div class="text-center mb-5 fade-in">
+        <h1 class="mb-3">Panel de Administración</h1>
+        <p style="color: rgba(255, 255, 255, 0.8); font-size: 1.1rem;">Bienvenido, {{ current_user.fullname }}</p>
+    </div>
+
+    <!-- Estadísticas Generales -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="card-glass fade-in">
+                <div class="text-center">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">💰</div>
+                    <h4>Total Donado</h4>
+                    <div style="font-size: 2rem; font-weight: 700; color: #48bb78; margin-top: 0.5rem;">$0.00</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card-glass fade-in">
+                <div class="text-center">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">👥</div>
+                    <h4>Total Donadores</h4>
+                    <div style="font-size: 2rem; font-weight: 700; color: #667eea; margin-top: 0.5rem;">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card-glass fade-in">
+                <div class="text-center">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📋</div>
+                    <h4>Donaciones</h4>
+                    <div style="font-size: 2rem; font-weight: 700; color: #f5576c; margin-top: 0.5rem;">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card-glass fade-in">
+                <div class="text-center">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📊</div>
+                    <h4>Promedio</h4>
+                    <div style="font-size: 2rem; font-weight: 700; color: #f093fb; margin-top: 0.5rem;">$0.00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Acciones Rápidas -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-6">
+            <div class="card-glass fade-in">
+                <h3 class="mb-4">Gestión de Donaciones</h3>
+                <div class="d-flex flex-column gap-2">
+                    <button class="btn-glass btn-glass-primary" onclick="verTodasDonaciones()">
+                        Ver Todas las Donaciones
+                    </button>
+                    <button class="btn-glass btn-glass-primary" onclick="exportarReporte()">
+                        Exportar Reporte
+                    </button>
+                    <button class="btn-glass btn-glass-primary" onclick="verEstadisticas()">
+                        Ver Estadísticas Detalladas
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card-glass fade-in">
+                <h3 class="mb-4">Gestión de Usuarios</h3>
+                <div class="d-flex flex-column gap-2">
+                    <button class="btn-glass btn-glass-secondary" onclick="verUsuarios()">
+                        Ver Todos los Usuarios
+                    </button>
+                    <button class="btn-glass btn-glass-secondary" onclick="crearUsuario()">
+                        Crear Nuevo Usuario
+                    </button>
+                    <button class="btn-glass btn-glass-secondary" onclick="gestionarRoles()">
+                        Gestionar Roles
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de Donaciones Recientes -->
+    <div class="card-glass fade-in">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3>Donaciones Recientes</h3>
+            <button class="btn-glass btn-glass-primary" onclick="actualizarTabla()">
+                Actualizar
+            </button>
+        </div>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; color: white; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.2);">
+                        <th style="padding: 1rem; text-align: left;">Donador</th>
+                        <th style="padding: 1rem; text-align: left;">Monto</th>
+                        <th style="padding: 1rem; text-align: left;">Categoría</th>
+                        <th style="padding: 1rem; text-align: left;">Fecha</th>
+                        <th style="padding: 1rem; text-align: left;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaDonaciones">
+                    <tr>
+                        <td colspan="5" style="padding: 2rem; text-align: center; color: rgba(255, 255, 255, 0.7);">
+                            No hay donaciones registradas aún.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% block customJS %}
+<script>
+    function verTodasDonaciones() {
+        alert('Función: Ver todas las donaciones\n\nAquí se mostrarían todas las donaciones con filtros y búsqueda.');
+        // Implementar lógica para mostrar todas las donaciones
+    }
+
+    function exportarReporte() {
+        alert('Función: Exportar reporte\n\nAquí se generaría un reporte en PDF o Excel con todas las donaciones.');
+        // Implementar lógica para exportar reporte
+    }
+
+    function verEstadisticas() {
+        alert('Función: Ver estadísticas detalladas\n\nAquí se mostrarían gráficos y análisis detallados de las donaciones.');
+        // Implementar lógica para mostrar estadísticas
+    }
+
+    function verUsuarios() {
+        alert('Función: Ver todos los usuarios\n\nAquí se mostraría una lista de todos los usuarios registrados.');
+        // Implementar lógica para mostrar usuarios
+    }
+
+    function crearUsuario() {
+        alert('Función: Crear nuevo usuario\n\nAquí se abriría un formulario para crear un nuevo usuario.');
+        // Implementar lógica para crear usuario
+    }
+
+    function gestionarRoles() {
+        alert('Función: Gestionar roles\n\nAquí se gestionarían los roles y permisos de los usuarios.');
+        // Implementar lógica para gestionar roles
+    }
+
+    function actualizarTabla() {
+        alert('Tabla actualizada');
+        // Implementar lógica para actualizar la tabla desde el servidor
+    }
+
+    // Cargar datos al iniciar
+    document.addEventListener('DOMContentLoaded', function() {
+        // Aquí puedes cargar los datos iniciales desde el servidor
+        console.log('Panel de administrador cargado');
+    });
+</script>
+{% endblock %}
+{% endblock %}

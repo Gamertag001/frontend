@@ -1,0 +1,168 @@
+{% extends './base.html' %}
+
+{% block title %}Panel Donador - Sistema de Donaciones{% endblock %}
+
+{% block body %}
+<nav class="nav-glass">
+    <div class="container-glass d-flex justify-content-between align-items-center">
+        <h3 style="margin: 0; color: white;">Sistema de Donaciones</h3>
+        <div class="d-flex gap-2">
+            <span style="color: rgba(255, 255, 255, 0.8); align-self: center; margin-right: 1rem;">{{ current_user.fullname }}</span>
+            <a href="{{ url_for('logout') }}" class="btn-glass btn-glass-secondary" style="text-decoration: none;">Cerrar Sesión</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container-glass mt-5">
+    <div class="text-center mb-5 fade-in">
+        <h1 class="mb-3">¡Bienvenido, {{ current_user.fullname }}!</h1>
+        <p style="color: rgba(255, 255, 255, 0.8); font-size: 1.1rem;">Tu panel de donaciones</p>
+    </div>
+
+    <div class="row g-4">
+        <!-- Card de Estadísticas -->
+        <div class="col-md-4">
+            <div class="card-glass fade-in">
+                <div class="text-center">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+                    <h3>Mis Donaciones</h3>
+                    <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem;">Total de donaciones realizadas</p>
+                    <div style="font-size: 2.5rem; font-weight: 700; color: #667eea; margin-top: 1rem;">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card de Nueva Donación -->
+        <div class="col-md-4">
+            <div class="card-glass fade-in">
+                <div class="text-center">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;"></div>
+                    <h3>Realizar Donación</h3>
+                    <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem;">Haz una nueva donación</p>
+                    <button class="btn-glass btn-glass-primary mt-3" onclick="mostrarFormularioDonacion()">
+                        Donar Ahora
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card de Historial -->
+        <div class="col-md-4">
+            <div class="card-glass fade-in">
+                <div class="text-center">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📜</div>
+                    <h3>Historial</h3>
+                    <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem;">Ver mis donaciones anteriores</p>
+                    <button class="btn-glass btn-glass-secondary mt-3" onclick="verHistorial()">
+                        Ver Historial
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario de Donación (oculto inicialmente) -->
+    <div id="formularioDonacion" class="card-glass mt-4" style="display: none;">
+        <h3 class="mb-4">Nueva Donación</h3>
+        <form id="donacionForm" onsubmit="procesarDonacion(event)">
+            <div class="form-floating-glass">
+                <input type="number" class="form-control-glass" id="monto" name="monto" placeholder="Monto" min="1" step="0.01" required>
+                <label for="monto">Monto de la donación ($)</label>
+            </div>
+            
+            <div class="form-floating-glass">
+                <select class="form-control-glass" id="categoria" name="categoria" required>
+                    <option value="">Selecciona una categoría</option>
+                    <option value="educacion">Educación</option>
+                    <option value="salud">Salud</option>
+                    <option value="alimentacion">Alimentación</option>
+                    <option value="vivienda">Vivienda</option>
+                    <option value="otro">Otro</option>
+                </select>
+                <label for="categoria">Categoría</label>
+            </div>
+
+            <div class="form-floating-glass">
+                <textarea class="form-control-glass" id="mensaje" name="mensaje" placeholder="Mensaje (opcional)" rows="3" style="resize: vertical;"></textarea>
+                <label for="mensaje">Mensaje (opcional)</label>
+            </div>
+
+            <div class="d-flex gap-2 mt-3">
+                <button type="submit" class="btn-glass btn-glass-primary" style="flex: 1;">
+                    Confirmar Donación
+                </button>
+                <button type="button" class="btn-glass btn-glass-secondary" onclick="ocultarFormularioDonacion()" style="flex: 1;">
+                    Cancelar
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Historial de Donaciones (oculto inicialmente) -->
+    <div id="historialDonaciones" class="card-glass mt-4" style="display: none;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3>Historial de Donaciones</h3>
+            <button class="btn-glass btn-glass-secondary" onclick="ocultarHistorial()">
+                Cerrar
+            </button>
+        </div>
+        <div id="listaDonaciones">
+            <p style="color: rgba(255, 255, 255, 0.7); text-align: center; padding: 2rem;">
+                No hay donaciones registradas aún.
+            </p>
+        </div>
+    </div>
+</div>
+
+{% block customJS %}
+<script>
+    function mostrarFormularioDonacion() {
+        document.getElementById('formularioDonacion').style.display = 'block';
+        document.getElementById('historialDonaciones').style.display = 'none';
+        document.getElementById('formularioDonacion').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function ocultarFormularioDonacion() {
+        document.getElementById('formularioDonacion').style.display = 'none';
+        document.getElementById('donacionForm').reset();
+    }
+
+    function verHistorial() {
+        document.getElementById('historialDonaciones').style.display = 'block';
+        document.getElementById('formularioDonacion').style.display = 'none';
+        document.getElementById('historialDonaciones').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Aquí puedes cargar el historial desde el servidor
+        cargarHistorial();
+    }
+
+    function ocultarHistorial() {
+        document.getElementById('historialDonaciones').style.display = 'none';
+    }
+
+    function procesarDonacion(event) {
+        event.preventDefault();
+        
+        const monto = document.getElementById('monto').value;
+        const categoria = document.getElementById('categoria').value;
+        const mensaje = document.getElementById('mensaje').value;
+
+        // Aquí puedes enviar los datos al servidor
+        alert('Donación de $' + monto + ' en la categoría ' + categoria + ' procesada. ¡Gracias por tu generosidad!');
+        
+        // Resetear formulario
+        document.getElementById('donacionForm').reset();
+        ocultarFormularioDonacion();
+        
+        // Actualizar estadísticas (simulado)
+        // En una implementación real, esto vendría del servidor
+    }
+
+    function cargarHistorial() {
+        // Aquí puedes hacer una petición AJAX al servidor para cargar el historial
+        // Por ahora, mostramos un mensaje
+        const lista = document.getElementById('listaDonaciones');
+        lista.innerHTML = '<p style="color: rgba(255, 255, 255, 0.7); text-align: center; padding: 2rem;">No hay donaciones registradas aún.</p>';
+    }
+</script>
+{% endblock %}
+{% endblock %}

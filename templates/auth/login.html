@@ -1,0 +1,156 @@
+{% extends './base.html' %}
+
+{% block title %}Iniciar Sesión - Sistema de Donaciones{% endblock %}
+
+{% block body %}
+<div class="d-flex align-items-center justify-content-center" style="min-height: 100vh; padding: 2rem; position: relative;">
+    <!-- Elementos decorativos flotantes -->
+    <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+    
+    <div class="form-glass fade-in" style="position: relative; z-index: 10;">
+        <div class="text-center mb-5">
+            <div class="logo-container mb-4">
+                <img class="logo-img" src="{{ url_for('static', filename='image/librito.png') }}" alt="Logo" width="100" height="100">
+            </div>
+            <h1 class="mb-3" style="font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, #2d4a5e 0%, #4a9eff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Bienvenido</h1>
+            <p style="color: #2d4a5e; font-size: 1.1rem; font-weight: 500;">Inicia sesión en tu cuenta</p>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert-glass alert-glass-primary" role="alert">
+            <strong>{{ message }}</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close" style="float: right; opacity: 0.8;"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <form action="/login" method="post" novalidate>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            
+            <div class="form-floating-glass">
+                <input type="text" class="form-control-glass" id="nombre" name="nombre" placeholder="nombre" required>
+                <label for="nombre">Usuario</label>
+            </div>
+
+            <div class="form-floating-glass">
+                <input type="email" class="form-control-glass" id="correo" name="correo" placeholder="correo" required>
+                <label for="correo">Correo electrónico</label>
+            </div>
+
+            <div class="form-floating-glass">
+                <input type="password" class="form-control-glass" name="password" placeholder="Contraseña" id="password" required>
+                <label for="password">Contraseña</label>
+            </div>
+
+            <button class="btn-glass btn-glass-primary w-100 mb-3" type="submit" style="width: 100%; margin-top: 1rem;">
+                <span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                        <polyline points="10 17 15 12 10 7"></polyline>
+                        <line x1="15" y1="12" x2="3" y2="12"></line>
+                    </svg>
+                    Iniciar Sesión
+                </span>
+            </button>
+            
+            <div class="text-center mt-4">
+                <p style="color: #2d4a5e; margin-bottom: 1rem; font-weight: 500; font-size: 1rem;">¿No tienes una cuenta?</p>
+                <button class="btn-glass btn-glass-secondary" type="button" onclick="window.location.href='/register'" style="width: 100%;">
+                    <span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="8.5" cy="7" r="4"></circle>
+                            <line x1="20" y1="8" x2="20" y2="14"></line>
+                            <line x1="23" y1="11" x2="17" y2="11"></line>
+                        </svg>
+                        Crear Nueva Cuenta
+                    </span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.logo-container {
+    display: inline-block;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    border-radius: 50%;
+    box-shadow: 0 8px 32px rgba(107, 182, 255, 0.3);
+    animation: float 3s ease-in-out infinite;
+}
+
+.logo-img {
+    filter: drop-shadow(0 4px 12px rgba(107, 182, 255, 0.4));
+    transition: transform 0.3s ease;
+}
+
+.logo-img:hover {
+    transform: scale(1.1) rotate(5deg);
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.floating-shapes {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.shape {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(107, 182, 255, 0.1);
+    backdrop-filter: blur(20px);
+    animation: floatShape 20s infinite ease-in-out;
+}
+
+.shape-1 {
+    width: 200px;
+    height: 200px;
+    top: 10%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.shape-2 {
+    width: 150px;
+    height: 150px;
+    top: 60%;
+    right: 15%;
+    animation-delay: 5s;
+}
+
+.shape-3 {
+    width: 100px;
+    height: 100px;
+    bottom: 20%;
+    left: 20%;
+    animation-delay: 10s;
+}
+
+@keyframes floatShape {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -30px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+}
+</style>
+{% endblock %}
+
+
